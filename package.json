@@ -1,0 +1,35 @@
+{
+  "name": "mincer-cssurl",
+  "version": "0.0.1",
+  "description": "css url fixer for Mincer",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "devDependencies": {
+    "mincer": "~1.0"
+  },
+  "peerDependencies": {
+    "mincer": "~1.0"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/xudejian/mincer-cssurl.git"
+  },
+  "keywords": [
+    "mincer",
+    "mincer-contrib",
+    "assets",
+    "pipeline",
+    "css",
+    "url",
+    "cssurl"
+  ],
+  "author": "Dejian Xu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xudejian/mincer-cssurl/issues"
+  },
+  "homepage": "https://github.com/xudejian/mincer-cssurl"
+}
