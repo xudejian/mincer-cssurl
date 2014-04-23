@@ -1,5 +1,7 @@
 # Mincer Css Url
 
+[![Build Status](https://travis-ci.org/xudejian/mincer-cssurl.png)](https://travis-ci.org/xudejian/mincer-cssurl)
+
 fix url in css for [Mincer](https://github.com/nodeca/mincer).
 
 ## Installation
