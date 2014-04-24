@@ -12,7 +12,9 @@
   "peerDependencies": {
     "mincer": "~1.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "^2.4.1"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/xudejian/mincer-cssurl.git"

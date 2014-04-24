@@ -1,7 +1,7 @@
 'use strict';
 var path = require('path'),
   url = require('url'),
-  _ = require('mincer/node_modules/lodash');
+  _ = require('lodash');
 
 module.exports = function (Mincer) {
 
