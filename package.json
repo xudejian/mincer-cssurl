@@ -1,16 +1,13 @@
 {
   "name": "mincer-cssurl",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "css url fixer for Mincer",
   "main": "index.js",
   "scripts": {
     "test": "node test/test.js"
   },
   "devDependencies": {
-    "mincer": "~1.0"
-  },
-  "peerDependencies": {
-    "mincer": "~1.0"
+    "mincer": "~0.5.0"
   },
   "dependencies": {
     "lodash": "^2.4.1"
