@@ -9,8 +9,9 @@ var env = new Mincer.Environment(__dirname);
 env.appendPath(__dirname + '/fixtures');
 
 env.ContextClass.defineAssetPath(function (pathname, options) {
-  var asset = this.environment.findAsset(pathname, options);
-  return asset.digestPath;
+  var asset = env.findAsset(pathname, options);
+  console.log(asset.digestPath);
+  return asset ? asset.digestPath : null;
 });
 
 env.enable('cssurl');
@@ -18,4 +19,4 @@ env.enable('cssurl');
 var asset = env.findAsset('example.css').toString(),
   png = env.findAsset('test.png').digestPath;
 assert.ok(asset.indexOf("url('"+png+"')") !== -1,
-          'should be replace orig url with asset path');
+          'should be replace "test.png" with asset ' + png + ' given ' + asset);

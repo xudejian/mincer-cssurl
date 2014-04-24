@@ -1,4 +1,7 @@
 'use strict';
+var path = require('path'),
+  url = require('url'),
+  _ = require('mincer/node_modules/lodash');
 
 module.exports = function (Mincer) {
 
@@ -10,30 +13,124 @@ module.exports = function (Mincer) {
 
   require('util').inherits(Cssurl, Mincer.Template);
 
-  function fix_url(css, context, locals) {
-    function resolve_path(url) {
-      var info = url.replace(/url\(|'|"|\)/g, '').split(/\?|#/, 2),
-        path = info[0],
-        query_string = info[1] || '',
-        ds = query_string === '' ? '' : url.charAt(path.length);
+  Cssurl.prototype.is_uri = function (str) {
+    return !!url.parse(str, false, true).protocol;
+  };
 
-      if (/^data\:/.test(path)) {
+  Cssurl.prototype.relative_path = function (file) {
+    file = path.resolve(this.file, '..', file);
+    file = path.relative(this.root, file);
+    file = path.relative(this.rootPath, file);
+    return file;
+  };
+
+  Cssurl.prototype.use = function(req) {
+    var opt = _.isFunction(req) ? req(this) : req;
+    return opt || {};
+  };
+
+  Cssurl.prototype.is_asset_path = function(path, fn) {
+    return _.isFunction(fn) ? fn(path) : false;
+  };
+
+  var indexOf = function(str, dep) {
+    var ds = {};
+    _.forEach(dep.split(''), function(c) {
+      ds[c] = true;
+    });
+
+    for (var i=0, _c = str.length; i<_c; i++) {
+      if (ds[str.charAt(i)]) {
+        return i;
+      }
+    }
+    return -1;
+  };
+
+  var split = function(path, dep) {
+    var idx = indexOf(path, dep);
+    if (idx === -1) {
+      idx = path.length;
+    }
+    return {
+      head: path.substr(0, idx),
+      tail: path.substr(idx)
+    };
+  };
+
+  Cssurl.prototype.isAssetRequirable = function (pathname, context) {
+    var file, stat;
+
+    file = context.resolve(pathname);
+    if (file.substr(-pathname.length) !== pathname) {
+      return false;
+    }
+    stat = context.environment.stat(file);
+
+    return stat && stat.isFile();
+  };
+
+  Cssurl.prototype.evaluate = function(context) {
+    var self = this;
+    this.root = context.environment.root;
+    this.rootPath = context.rootPath;
+    var option = self.use(requirements);
+    var assetPath = option.assetPath || context.assetPath;
+    function resolve_path(url) {
+      var file = url.replace(/url\(|'|"|\)/g, '');
+      if (/^data\:/.test(file)) {
+        return url;
+      }
+      if (self.is_uri(file)) {
+        return url;
+      }
+      if (self.is_asset_path(file, option.isAssetPath)) {
         return url;
       }
 
       try {
-        path = context.assetPath(path);
+        var info = split(file, '?#');
+        var rfile = self.relative_path(info.head);
+        context.dependOn(rfile);
+        if (!self.isAssetRequirable(rfile, context)) {
+          return url;
+        }
+
+        var asset = assetPath(rfile);
+        if (asset) {
+          return ["url('", asset, info.tail, "')"].join('');
+        }
       } catch (e) {
-        console.error("Can't resolve image path: " + path);
+        if (e.code !== 'FileNotFound') {
+          console.error("Can't resolve asset ", file, url, e);
+        }
       }
-      return ["url('", path, ds, query_string, "')"].join('');
+      return url;
     }
 
-    return css.replace(/url\([^\)]+\)/g, resolve_path);
-  }
+    this.data = this.data.replace(/url\([^\)]+\)/g, resolve_path);
+    return this.data;
+  };
 
-  Cssurl.prototype.evaluate = function (context, locals) {
-    this.data = fix_url(this.data, context, locals);
+  // Internal (private) requirements storage
+  var requirements;
+
+
+  /**
+   *  Cssurl.configure(reqs) -> Void
+   *  - reqs (Function|Object):
+   *
+   *  Allows to set Cssurl requirements.
+   *
+   *  Default: `undefined`.
+   *
+   *
+   *  ##### Example
+   *
+   *      Cssurl.configure(reqs);
+   **/
+  Cssurl.configure = function (reqs) {
+    requirements = _.clone(reqs);
   };
 
   Mincer.registerConfiguration("cssurl", {
