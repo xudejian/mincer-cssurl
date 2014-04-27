@@ -4,6 +4,16 @@
 
 fix url in css for [Mincer](https://github.com/nodeca/mincer).
 
+```css
+background: url('select2.png') right top no-repeat;
+```
+
+will be render to
+
+```css
+background: url('/assets/select2/select2-1ea55de27688da0a7b20119a50b6dff3.png') right top no-repeat;
+```
+
 ## Installation
 
 Install from npm registry:
@@ -11,15 +21,6 @@ Install from npm registry:
 ```
 $ npm install mincer-cssurl
 ```
-
-or add `mincer-cssurl` to your `package.json`:
-
-```json
-"dependencies": {
-  "mincer-cssurl": "0.0.1"
-}
-```
-
 
 ## Usage
 
@@ -38,15 +39,6 @@ user_env.enable("cssurl");
 admin_env.disable("cssurl");
 
 ```
-
-
-## Running Tests
-
-```
-$ npm install --development
-$ npm test
-```
-
 
 ## License
 
