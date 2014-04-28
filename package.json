@@ -1,6 +1,6 @@
 {
   "name": "mincer-cssurl",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "css url fixer for Mincer",
   "main": "index.js",
   "scripts": {
