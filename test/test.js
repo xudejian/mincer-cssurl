@@ -10,7 +10,6 @@ env.appendPath(__dirname + '/fixtures');
 
 env.ContextClass.defineAssetPath(function (pathname, options) {
   var asset = env.findAsset(pathname, options);
-  console.log(asset.digestPath);
   return asset ? asset.digestPath : null;
 });
 
@@ -20,3 +19,7 @@ var asset = env.findAsset('example.css').toString(),
   png = env.findAsset('test.png').digestPath;
 assert.ok(asset.indexOf("url('"+png+"')") !== -1,
           'should be replace "test.png" with asset ' + png + ' given ' + asset);
+
+asset = env.findAsset('absolute.css').toString();
+assert.ok(asset.indexOf("url('"+png+"')") !== -1,
+          'should be replace "/test.png" with asset ' + png + ' given ' + asset);

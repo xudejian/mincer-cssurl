@@ -18,6 +18,14 @@ module.exports = function (Mincer) {
   };
 
   Cssurl.prototype.relative_path = function (file) {
+    if ((file||'').length < 1) {
+      return file;
+    }
+
+    if (file[0] === '/') {
+      return file.substr(1);
+    }
+
     file = path.resolve(this.file, '..', file);
     file = path.relative(this.root, file);
     file = path.relative(this.rootPath, file);
