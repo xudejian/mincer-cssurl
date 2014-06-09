@@ -2,13 +2,16 @@
   "name": "mincer-cssurl",
   "version": "0.0.5",
   "description": "css url fixer for Mincer",
-  "main": "index.js",
+  "main": "./index",
   "scripts": {
-    "test": "NODE_ENV=test mocha"
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter spec && NODE_ENV=test ./node_modules/.bin/mocha --require blanket --reporter travis-cov",
+    "test-cov-report": "NODE_ENV=test ./node_modules/.bin/mocha --require blanket --reporter html-cov > coverage.html && open coverage.html"
   },
   "devDependencies": {
     "mincer": "~0.5.0",
-    "mocha": "~1.18.2"
+    "mocha": "~1.18.2",
+    "blanket": "~1.1.6",
+    "travis-cov": "~0.2.5"
   },
   "dependencies": {
     "lodash": "~2.4.1"
@@ -30,6 +33,12 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/xudejian/mincer-cssurl/issues"
+  },
+  "config": {
+    "travis-cov": { "threshold": 70 },
+    "blanket": {
+      "pattern": "//^((?!/node_modules/)(?!/test/).)*$/ig"
+    }
   },
   "homepage": "https://github.com/xudejian/mincer-cssurl"
 }
