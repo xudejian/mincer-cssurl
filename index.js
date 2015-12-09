@@ -105,6 +105,8 @@ module.exports = function (Mincer) {
         }
 
         var asset = assetPath(rfile);
+        // replace backslashes with forward slashes for Windows
+        asset = asset.replace(/\\/g,'/')
         if (asset) {
           return ["url('", asset, info.tail, "')"].join('');
         }
